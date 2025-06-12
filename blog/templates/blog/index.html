@@ -1,0 +1,60 @@
+﻿<!-- templates/blog/base.html -->
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}Mi Blog{% endblock %}</title>
+  </head>
+  <body>
+    <header>
+      <h1>Mi Blog Personal</h1>
+      <nav>
+        <a href="{% url 'index' %}">Inicio</a> |
+        <a href="{% url 'crear_post' %}">Nuevo Post</a> |
+        <a href="{% url 'crear_autor' %}">Nuevo Autor</a> |
+        <a href="{% url 'crear_categoria' %}">Nueva Categoría</a> |
+        <a href="{% url 'buscar_post' %}">Buscar Posts</a>
+      </nav>
+    </header>
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer>
+      <p>Blog creado con Django - San Juan, Argentina</p>
+    </footer>
+  </body>
+</html>
+
+<!-- templates/blog/index.html -->
+{% extends 'blog/base.html' %} {% block content %}
+<h2>Bienvenido a mi Blog</h2>
+<p>Este es un blog simple creado con Django como parte de mi aprendizaje.</p>
+{% endblock %}
+
+<!-- templates/blog/post_form.html -->
+{% extends 'blog/base.html' %} {% block content %}
+<h2>Crear Nuevo Post</h2>
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Guardar</button>
+</form>
+{% endblock %}
+
+<!-- Las plantillas autor_form.html y categoria_form.html son similares a post_form.html -->
+
+<!-- templates/blog/buscar.html -->
+{% extends 'blog/base.html' %} {% block content %}
+<h2>Buscar Posts</h2>
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+  <button type="submit">Buscar</button>
+</form>
+
+{% if posts %}
+<h3>Resultados:</h3>
+<ul>
+  {% for post in posts %}
+  <li>{{ post.titulo }} - {{ post.autor }}</li>
+  {% endfor %}
+</ul>
+{% endif %} {% endblock %}
